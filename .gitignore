@@ -221,3 +221,4 @@ __marimo__/
 data/raw/*.csv
 data/raw/*.xlsx
 data/raw/*.zip
+data/raw/

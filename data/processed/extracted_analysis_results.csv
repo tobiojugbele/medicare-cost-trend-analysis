@@ -1,0 +1,3 @@
+state_name,year,per_capita_spending,prior_year_spending,yoy_pct_change
+region_name,year,total_per_capita,inpatient_per_capita,outpatient_per_capita,inpatient_budget_share,outpatient_budget_share
+location_name,geographic_level,year,per_capita_spending,population_risk_score,risk_adjusted_spending
