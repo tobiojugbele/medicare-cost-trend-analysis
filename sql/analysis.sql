@@ -1,4 +1,5 @@
--- 📈 1. State-Level Longitudinal Expenditure Growth & YoY Trend Matrix
+-- 📈 QUERY 1: Longitudinal State Per-Capita Expenditure Growth & YoY Trend Matrix
+-- Interview Note: Uses LAG() window function partitioned by region to isolate consecutive year-over-year cost adjustments across state boundaries.
 SELECT 
     bene_geo_desc AS state_name,
     year,
@@ -8,10 +9,12 @@ SELECT
           LAG(tot_mdcr_stdzd_pymt_pc, 1) OVER (PARTITION BY bene_geo_desc ORDER BY year)) * 100, 2) AS yoy_pct_change
 FROM geo_variation
 WHERE bene_geo_lvl = 'State' 
-  AND bene_age_lvl = 'All Beneficiaries'
+  AND bene_age_lvl = 'All'
 ORDER BY state_name, year;
 
--- 🏥 2. Institutional Intensity: Inpatient vs. Outpatient Care Share Profile
+
+-- 🏥 QUERY 2: Institutional Care Setting Allocation & Intensity Profile
+-- Interview Note: Pivots standardized inpatient and outpatient per-capita ratios to identify if regional costs are driven by expensive hospitalizations or clinical outpatient services.
 SELECT 
     bene_geo_desc AS region_name,
     year,
@@ -22,10 +25,12 @@ SELECT
     ROUND(op_mdcr_pymt_pct, 2) AS outpatient_budget_share
 FROM geo_variation
 WHERE bene_geo_lvl = 'State'
-  AND bene_age_lvl = 'All Beneficiaries'
+  AND bene_age_lvl = 'All'
 ORDER BY total_per_capita DESC;
 
--- 🔬 3. High-Variance Risk-Adjusted Cost Efficiencies
+
+-- 🔬 QUERY 3: High-Cost Regional Variation & Variance Rankings
+-- Interview Note: Normalizes per-capita spending metrics against the average population risk score to isolate genuine geographic spending inefficiencies from structural patient sickness.
 SELECT 
     bene_geo_desc AS location_name,
     bene_geo_lvl AS geographic_level,
@@ -35,6 +40,6 @@ SELECT
     ROUND(tot_mdcr_stdzd_pymt_pc / bene_avg_risk_scre, 2) AS risk_adjusted_spending
 FROM geo_variation
 WHERE bene_geo_lvl IN ('State', 'County')
-  AND bene_age_lvl = 'All Beneficiaries'
+  AND bene_age_lvl = 'All'
   AND bene_avg_risk_scre > 0
 ORDER BY risk_adjusted_spending DESC;
