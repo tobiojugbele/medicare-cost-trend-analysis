@@ -222,3 +222,4 @@ data/raw/*.csv
 data/raw/*.xlsx
 data/raw/*.zip
 data/raw/
+medicare_project.db
